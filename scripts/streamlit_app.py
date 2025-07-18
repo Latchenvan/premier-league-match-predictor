@@ -4,25 +4,26 @@ import pandas as pd
 import pickle
 import datetime
 
-# Load model
-model = pickle.load(open("/Users/tobe2.0/Portfolio/premier league match predictor/data/xgb_model.pkl", "rb"))
-# Load team form data
-form_df = pd.read_csv("/Users/tobe2.0/Portfolio/premier league match predictor/data/team_form_stats.csv")
+import os
 
+model_path = os.path.join("data", "xgb_model.pkl")
+model = pickle.load(open(model_path, "rb"))
+form_path = os.path.join("data", "team_form_stats.csv")
+team_form = pd.read_csv(form_path)
 st.title("⚽ EPL Match Result Predictor")
 
 st.markdown("Predict the outcome of a Premier League match using pre-match team form features and XGBoost.")
 
 # Team selection
-teams = sorted(form_df['Team'].unique())
+teams = sorted(team_form['Team'].unique())
 home_team = st.selectbox("🏠 Home Team", teams)
 away_team = st.selectbox("🚗 Away Team", [t for t in teams if t != home_team])
 
 # Prediction button
 if st.button("🔮 Predict Match Result"):
     # Get latest form for selected teams
-    home_row = form_df[form_df['Team'] == home_team].iloc[-1]
-    away_row = form_df[form_df['Team'] == away_team].iloc[-1]
+    home_row = team_form[team_form['Team'] == home_team].iloc[-1]
+    away_row = team_form[team_form['Team'] == away_team].iloc[-1]
 
     # Build input feature
     features = pd.DataFrame([{
