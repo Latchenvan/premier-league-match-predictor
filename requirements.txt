@@ -1,0 +1,5 @@
+streamlit
+xgboost
+pandas
+scikit-learn
+numpy
